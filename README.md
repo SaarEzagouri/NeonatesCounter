@@ -9,5 +9,5 @@ The script outputs images with corresponding bounding boxes and generates a .txt
 **Figure 1.** A schematic representation of the algorithm. <br><br><br><br>
 
 <p align="center">
-  <img src="https://example.com/path/to/FreezeMLogo.png" alt="Version 1.0, 3/2025, All rights reserved to [FreezeM](https://www.freezem.com/)">
+  <img src="FreezeMLogo.png" alt="Version 1.0, 3/2025, All rights reserved to [FreezeM](https://www.freezem.com/)">
 </p>
