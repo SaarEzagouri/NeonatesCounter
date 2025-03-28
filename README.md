@@ -7,7 +7,8 @@ The script outputs images with corresponding bounding boxes and generates a .txt
 
 
 ![](schematic_pipeline.png)
-Figure 1. A schematic representation of the algorithm.
+**Figure 1.** A schematic representation of the algorithm.
+
 
 
 #### Version 1.0, 3/2025, All rights reserved to [FreezeM](https://www.freezem.com/).
