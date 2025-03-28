@@ -7,7 +7,7 @@ The script outputs images with corresponding bounding boxes and generates a .txt
 
 
 ![](schematic_pipeline.png)
-**Figure 1.** A schematic representation of the algorithm.
+**Figure 1.** A schematic representation of the algorithm. <br><br><br>
 
 
 
