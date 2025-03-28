@@ -15,5 +15,5 @@ The script outputs images with corresponding bounding boxes and generates a .txt
   <strong>Version 1.0, 3/2025, All rights reserved to <a href="https://www.freezem.com/">FreezeM</a></strong>
 </p>
 <p align="center">
-  Developed and maintained by Saar Ezagouri
+  Development and maintenance by Saar Ezagouri
 </p>
