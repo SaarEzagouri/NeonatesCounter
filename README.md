@@ -12,5 +12,5 @@ The script outputs images with corresponding bounding boxes and generates a .txt
   <img src="FreezeMLogo.png" alt="FreezeM Logo">
 </p>
 <p align="center">
-  <strong>Version 1.0, 3/2025, All rights reserved to <a href="https://www.freezem.com/">FreezeM</a>.</strong>
+  <strong>Version 1.0, 3/2025, All rights reserved to <a href="https://www.freezem.com/">FreezeM</a></strong>
 </p>
