@@ -1,12 +1,9 @@
 '''''
 NeonatesCounter version 1.0, all rights reserved to FreezeM.
 
-This script is used to detect neonates in images using YOLOv8m and stitch the detected objects back together.
-Patchify is used to split the image into overlapping patches, and the YOLO model is run on each patch.
-The detected objects are then overlaid on the reconstructed image.
-The final image is saved with bounding boxes around the detected objects, and a log file is created with the detection results.
+This script detects neonates in images using a custom-trained YOLOv8m model. It employs Patchify to divide the image into overlapping patches, runs the YOLO model on each patch, and reconstructs the image with detected objects overlaid. The final output includes an annotated image with bounding boxes and a log file documenting the detections.  
 
-Patch size and stride can be adjusted to control the overlap between patches. It is hard-coded to 416x416 patches with a stride of 376 in ImagePatcher class.
+The patch size and stride, set in the `ImagePatcher` class, are fixed at 416×416 with a 376-pixel stride, allowing control over the overlap between patches.
 '''''
 
 #Imports:
