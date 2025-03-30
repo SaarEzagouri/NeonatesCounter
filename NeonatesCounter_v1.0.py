@@ -1,20 +1,22 @@
-'''''
+''''' 
+Difference between NeonatesCounter v3 and v4: v4 does not output any JSON files or log files; it only outputs the images with bounding boxes. Also, it returns the number of objects detected in each image as a vector.
+
 NeonatesCounter version 1.0, all rights reserved to FreezeM.
 
-This script detects neonates in images using a custom-trained YOLOv8m model. It employs Patchify to divide the image into overlapping patches, runs the YOLO model on each patch, and reconstructs the image with detected objects overlaid. The final output includes an annotated image with bounding boxes and a log file documenting the detections.  
+This script is used to detect neonates in images using YOLOv8m and stitch the detected objects back together.
+Patchify is used to split the image into overlapping patches, and the YOLO model is run on each patch.
+The detected objects are then overlaid on the reconstructed image.
+The final image is saved with bounding boxes around the detected objects.
 
-The patch size and stride, set in the `ImagePatcher` class, are fixed at 416×416 with a 376-pixel stride, allowing control over the overlap between patches.
-'''''
+Patch size and stride can be adjusted to control the overlap between patches. It is hard-coded to 416x416 patches with a stride of 376 in ImagePatcher class.
+''''' 
 
 #Imports:
 import os
 import cv2
 import numpy as np
-import shutil
 import time
-import json
 from pathlib import Path
-from datetime import datetime
 from patchify import patchify
 from ultralytics import YOLO
 
@@ -70,39 +72,31 @@ class ResultSaver:
     def __init__(self, output_path):
         self.output_path = output_path
 
-    def save_log(self, log_path, num_objects, runtime):
-        """Saves detection log to a file."""
-        log_data = {
-            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "objects_detected": num_objects,
-            "runtime_seconds": f"{runtime:.3f}"
-        }
-        with open(log_path, "w") as f:
-            json.dump(log_data, f, indent=4)
-
     def save_image(self, image, output_folder, image_name):
         """Saves the final image with bounding boxes."""
-        output_image_path = os.path.join(output_folder, f"{image_name}_reconstructed.jpg")
+        output_image_path = os.path.join(output_folder, f"{image_name}_bboxes.jpg")
         cv2.imwrite(output_image_path, image)
 
 class ImageProcessor:
-    def __init__(self, model_path, test_images_path, output_path):
+    def __init__(self, model_path, images_path):
         self.model_path = model_path
-        self.test_images_path = test_images_path
-        self.output_path = output_path
+        self.images_path = images_path
 
         self.patcher = ImagePatcher()
         self.model = YOLOModel(model_path)
         self.repatcher = ImageRepatcher()
-        self.saver = ResultSaver(output_path)
+        self.saver = ResultSaver(images_path)
 
     def process_images(self):
         """Processes images, detects objects, and stitches them back together."""
         start_time = time.time()
-        total_detections = 0
-        Path(self.output_path).mkdir(parents=True, exist_ok=True)
+        results = []
+        Path(self.images_path).mkdir(parents=True, exist_ok=True)
 
-        for img_path in Path(self.test_images_path).glob("*.jpg"):
+        for img_path in Path(self.images_path).glob("*.jpg"):
+            if "Overlay" in img_path.name or img_path.stem.endswith("_bboxes"):
+                continue
+
             image = cv2.imread(str(img_path))
             h, w, _ = image.shape
 
@@ -115,21 +109,23 @@ class ImageProcessor:
             patch_preds = np.zeros_like(patches)
 
             detections = []
+            num_detections = 0
             for i in range(patches.shape[0]):
                 for j in range(patches.shape[1]):
                     patch = patches[i, j, 0]
 
                     # Run YOLO on patch
-                    results = self.model.predict(patch)
+                    results_yolo = self.model.predict(patch)
 
                     # Check if any predictions are found
-                    if results:
-                        for result in results:
+                    if results_yolo:
+                        for result in results_yolo:
                             for box in result.boxes:
                                 x1, y1, x2, y2 = map(int, box.xyxy[0])
-                                # Adjust coordinates to match the full image
                                 detections.append((x1 + j * self.patcher.stride, y1 + i * self.patcher.stride, x2 + j * self.patcher.stride, y2 + i * self.patcher.stride))
-                                total_detections += 1
+                                num_detections += 1
+
+            results.append(num_detections)
 
             # Reconstruct the full image from patches
             reconstructed_image = self.repatcher.repatch_image(patches, (padded_h, padded_w, 3))
@@ -137,33 +133,25 @@ class ImageProcessor:
             # Crop back to original image size
             reconstructed_image = reconstructed_image[:h, :w]
 
-            # Create the folder for saving predictions specific to this image
-            image_name = img_path.stem
-            output_folder = os.path.join(self.output_path, f"{image_name}_predictions")
-
-            # Check if folder exists, and handle overwriting
-            if os.path.exists(output_folder):
-                print(f"Warning: The folder '{output_folder}' already exists. It will be overwritten.")
-                shutil.rmtree(output_folder)
-            
-            Path(output_folder).mkdir(parents=True, exist_ok=True)
-
-            # Draw bounding boxes on the reconstructed image
+            # Draw bounding boxes on the reconstructed image with transparency
+            overlay = reconstructed_image.copy()
             for x1, y1, x2, y2 in detections:
-                cv2.rectangle(reconstructed_image, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                cv2.rectangle(overlay, (x1, y1), (x2, y2), (0, 0, 255), 1, cv2.LINE_AA)
+            cv2.addWeighted(overlay, 0.5, reconstructed_image, 0.5, 0, reconstructed_image)
 
             # Save the final image with bounding boxes
-            self.saver.save_image(reconstructed_image, output_folder, image_name)
+            self.saver.save_image(reconstructed_image, self.images_path, img_path.stem)
+        
+        return results
 
-        runtime = time.time() - start_time
-        self.saver.save_log(os.path.join(self.output_path, f"{image_name}_results.txt"), total_detections, runtime)
-        print(f"Processing complete. {total_detections} objects detected in {runtime:.2f} seconds.")
+# Find the newest folder inside Nachshonim Neonates Calibration
+data_root = Path("C:/Projects/FreeZem/NeonatesCounter/dataset/") #("https://www.dropbox.com/home/FreezeM%20R%26D/Nachshonim%20Neonates%20Calibration")
+latest_folder = str(max(data_root.iterdir(), key=lambda d: d.stat().st_mtime))
 
 # Instantiate and run
 if __name__ == "__main__":
     processor = ImageProcessor(
-        model_path="best_model.pt",
-        test_images_path="path/to/images",
-        output_path="path/to/output"
+        model_path = "NeonatesCounter_v1.0_model.pt",#"https://www.dropbox.com/home/FreezeM%20R%26D/Engineering%20RnD/Projects/Calibtaion%20Procedure/SaarDev/NeonatesCounter/NeonatesCounter_v1.0/NeonatesCounter_v1.0_model.pt",
+        images_path = latest_folder
     )
-    processor.process_images()
+    results = processor.process_images()
