@@ -21,7 +21,7 @@ The Python script is called by the MATLAB script as follows: <br>
 </pre>
 
 
-The results of both image processing algorithms are summarized in "CN_Result.xlsx". Both algorirthm also output processed images, the first algorithm (i.e. Calibration_Vimba_V3.m) outputs the "Overlay.jpg" and the second algorithm i.e. "NeonatesCounter_v1.0.py" outputs *.jpg images with the suffix "_bboxes". <br><br>
+The results of both image processing algorithms are summarized in "CN_Result.xlsx". Both algorirthm also output processed images, the first algorithm (i.e. Calibration_Vimba_V3.m) outputs the "Overlay.jpg" and the second algorithm i.e. "NeonatesCounter_v1.0.py" outputs *.jpg images with the suffix "_bboxes". <br><br><br>
 
 <p align="center">
   <img src="FreezeMLogo.png" alt="FreezeM Logo">
