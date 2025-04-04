@@ -12,6 +12,7 @@ The script outputs images with corresponding bounding boxes for each analyzed im
 The script "NeonatesCounter_v1.0.py" is integrated into "Calibration_Vimba_V3.m", so when the GUI is run by pressing "Start", both analyses are executed. <br>
 The Python script is called by the MATLAB script as follows: <br>
 <pre> 
+    % "Calibration_Vimba_V3.m" script, line 531.
     PathForExcel_python = strrep(PathForExcel, '\', '\\');
     model_path = "PATH_TO_MODEL\\NeonatesCounter_v1.0_model.pt"; % Insert the model path
     images_path = py.str(PathForExcel_python) ;
