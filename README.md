@@ -6,7 +6,7 @@ Counting neonates of black soldier flies in high resolution images.
 The script outputs images with corresponding bounding boxes for each analyzed image (Figure 1). This script returns a dictionary with the structure {'image_name': number_of_detected_objects} and maps the number of detected objects to the "alg2_n_detections" column in the "CN_Result.xlsx" file located in the output folder. <br><br>
 
 ![](schematic_pipeline.png)
-**Figure 1.** A schematic representation of the algorithm. <br><br><br><br>
+**Figure 1.** A schematic representation of the algorithm. <br><br><br>
 
 ### Integration with the MATLAB pipeline:
 The script "NeonatesCounter_v1.0.py" is integrated into "Calibration_Vimba_V3.m", so when the GUI is run by pressing "Start", both analyses are executed. <br>
