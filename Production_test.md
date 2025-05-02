@@ -1,13 +1,13 @@
 ## Production test
 
 Root folder: "C:\Saar\Projects\NeonatesCounter" <br>
---NeonatesCounter
-   --Dev
-      --model.pt
-      --file1.py
-   --Production
-      --model.pt
-      --file1.py
+--NeonatesCounter <br>
+   --Dev <br>
+      --model.pt <br>
+      --file1.py <br>
+   --Production <br>
+      --model.pt <br>
+      --file1.py <br>
 
 #### 5.2.2025
 **Model *conf* increased from 0.045 --> 0.65**. The difference between the output of the MATLAB and Python algorithms was ~20% therefore the conf was increased. Revise the conf after the next validation round comparing the 2 algorithms and Samuel's annotation. <br>
