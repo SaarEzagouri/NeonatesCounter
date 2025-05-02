@@ -17,6 +17,7 @@ New features in v1.2:
 - Bboxes are drawn with a thin line and semi-transparent overlay.
 - Analyze all images in each folder except of "Overlay.jpg".
 - Update the XLSX file with the number of detected objects for each image and the mean.
+- Error handling: If excel / images not found, display message and continue.
 
 """""
 
