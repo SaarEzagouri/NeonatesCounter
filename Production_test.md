@@ -23,3 +23,4 @@ NeonatesCounter/
 :white_check_mark: saves all analyzed images. skips Overlay.jpg. updating the excel. <br>
 :white_check_mark: scheduler is running with forced run. <br>
 :question: scheduler should work at 23:00, even if windows is logged out. <br>
+U+274C
