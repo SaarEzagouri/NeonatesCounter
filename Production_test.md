@@ -24,4 +24,6 @@ NeonatesCounter/
 :white_check_mark: Scheduler is running with forced run. <br>
 ✅ Error Handling: No excel file and/or images found, display error message and continue. <br>
 :question: scheduler should work at 23:00, even if windows is logged out. <br>
+**To Improve:** <br>
+Error handling: structure function in try - except.
 
