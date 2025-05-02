@@ -1,0 +1,2 @@
+**Production test:** <br>
+**5.2.2025**, model conf = 0.65 (was 0.045). The difference between the output of the MATLAB and Python algorithms was ~20% therefore the conf was increased. Revise the conf after the next validation round comparing the 2 algorithms and Samuel's annotation.
