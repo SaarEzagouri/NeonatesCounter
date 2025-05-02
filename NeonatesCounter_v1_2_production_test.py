@@ -93,31 +93,31 @@ class ResultSaver:
 class XLSXUpdater:
     def __init__(self, folder_path):
         self.folder_path = folder_path
-        self.file_path = self.find_xlsx_file()  # Automatically find the .xlsx file
+        self.file_path = self.find_xlsx_file()
 
     def find_xlsx_file(self):
         """Finds the first .xlsx file in the given directory."""
         for file in os.listdir(self.folder_path):
             if file.endswith(".xlsx"):
                 return os.path.join(self.folder_path, file)
-        raise FileNotFoundError("No .xlsx file found in the folder.")
+        return None  # Don't raise error
 
     def update_xlsx(self, filenames, detections_per_image):
         """Adds image filenames and detection counts as new columns to the Excel file, plus a 'mean' row."""
+        if not self.file_path:
+            print("No Excel file found, skipping Excel update.")
+            return  # Skip if no Excel file
+
         df = pd.read_excel(self.file_path, engine='openpyxl')
-    
-        # Make sure you append the filenames and detections before checking row count
         image_filenames = filenames + ['mean']
         detection_values = [detections_per_image[name] for name in filenames]
-        mean_detection = int(np.round(np.mean(detection_values)))  # You can also use float if you prefer decimals
+        mean_detection = int(np.round(np.mean(detection_values)))
         detection_counts = detection_values + [mean_detection]
-    
-        # Add or extend columns
-        df = df.reindex(range(len(image_filenames)))  # Expand DataFrame if necessary
+
+        df = df.reindex(range(len(image_filenames)))  # Expand DataFrame if needed
         df["image_filename"] = image_filenames
         df["detections_count"] = detection_counts
-    
-        # Save updated Excel file
+
         df.to_excel(self.file_path, index=False, engine='openpyxl')
 
 # ------------- Main Processor ------------- #
@@ -134,12 +134,15 @@ class ImageProcessor:
         self.xlsx_updater = XLSXUpdater(root_folder)
 
     def process_images(self):
-        """Processes images, detects objects, updates the Excel file, and saves the images."""
         detections_per_image = {}
-        filenames = []  # Add this line to initialize the filenames list
+        filenames = []
 
-        # Get all image paths in the current folder
         image_paths = list(self.root_folder.glob("*.jpg"))
+        image_paths = [img_path for img_path in image_paths if "Overlay" not in img_path.stem and not img_path.stem.endswith("_bboxes")]
+
+        if not image_paths:
+            print(f"No valid images found in {self.root_folder}, skipping.")
+            return  # Nothing to do
 
         for img_path in image_paths:
             if "Overlay" in img_path.stem or img_path.stem.endswith("_bboxes"):
@@ -208,7 +211,7 @@ class ImageProcessor:
 def main():
     script_path = Path(__file__).parent
     model_path = script_path / "NeonatesCounter_v1.0_model.pt"
-    img_dir = Path("C:/Users/Office/FreezeM Dropbox/FreezeM R&D/Nachshonim Neonates Calibration")
+    img_dir = Path("C:/Users/FreezeM Hermetia/FreezeM Dropbox/FreezeM R&D/Neonate Calibration Hermetia")
     
     # Get the directories created today
     today = pd.Timestamp.today().strftime('%Y-%m-%d')
