@@ -22,5 +22,6 @@ NeonatesCounter/
 :white_check_mark: The code is analyzing every image in all dirs created, but not modified, on the day of the running. <br>
 :white_check_mark: All analyzed images are saved. skips Overlay.jpg. updating the excel. <br>
 :white_check_mark: Scheduler is running with forced run. <br>
+✅ Error Handling: No excel file and/or images found, display error message and continue. <br>
 :question: scheduler should work at 23:00, even if windows is logged out. <br>
-:x: the code is terminating when folders are empty or without an excel file.
+
