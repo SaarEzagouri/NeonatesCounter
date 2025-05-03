@@ -24,7 +24,7 @@ NeonatesCounter/
 :white_check_mark: All analyzed images are saved. skips Overlay.jpg. updating the excel. <br>
 :white_check_mark: Scheduler is running with forced run. <br>
 ✅ Error Handling: No excel file and/or images found, display error message and continue. <br>
-✅ scheduler should work at 23:00, even if windows is logged out. <br>
+✅ Scheduler should work at 23:00 at both locations, even if windows is logged out. <br>
 
 **To Improve:** <br>
 Error handling: structure function in try - except.
