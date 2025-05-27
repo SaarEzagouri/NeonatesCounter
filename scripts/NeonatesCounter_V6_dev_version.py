@@ -1,5 +1,5 @@
 """
-NeonatesCounter_V1_eval_test.py
+NeonatesCounter_V6.py
 This script provides a pipeline for evaluating and processing images using a YOLO-based object detection model, 
 specifically tailored for counting and analyzing neonates in images.
 
@@ -369,9 +369,9 @@ class ImageProcessor:
     Attributes:
         model_path (str or Path): Path to the YOLO model.
         root_folder (str or Path): Folder containing images.
-        show_scores (bool): Whether to show confidence scores.
-        debugging (bool): Enable debugging mode.
-        eval_mode (bool): Enable evaluation mode.
+        show_scores (bool): If True, displays detection confidence scores on the output images.
+        debugging (bool): If True, enables additional debug output and visualizations for troubleshooting.
+        eval_mode (bool): If True, runs the processor in evaluation mode, comparing results to ground truth annotations.
         anno_path (str or Path): Path to annotation file.
     """
     def __init__(self, model_path, root_folder, show_scores=True, debugging=False, eval_mode=False, anno_path=None):
@@ -766,7 +766,19 @@ class ImageProcessor:
 
 def main():
     """
-    Main routine for processing all image folders created today, running detection and evaluation, and saving results.
+    This function performs the following steps:
+    1. Determines the script and model paths.
+    2. Sets the image directory and creates an analysis directory if it does not exist.
+    3. Identifies all subfolders in the image directory that were created today (excluding the analysis directory).
+    4. For each folder created today:
+        - Creates a corresponding analysis directory.
+        - Initializes an ImageProcessor with the following options:
+            - show_scores (bool): If True, displays detection confidence scores on the output images.
+            - debugging (bool): If True, enables additional debug output and visualizations for troubleshooting.
+            - eval_mode (bool): If True, runs the processor in evaluation mode, comparing results to ground truth annotations.
+        - Processes the images in the folder and saves analysis plots.
+    5. Prints a completion message when processing is finished.
+    
     """
     script_path = Path(__file__).parent
     model_path = script_path / "NeonatesCounter_v1.0_model.pt"
