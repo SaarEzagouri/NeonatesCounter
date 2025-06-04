@@ -1,0 +1,12 @@
+names: ['neonate']
+nc: 1
+path: "C:/Projects/FreeZem/NeonatesCounter/git/NeonatesCounter/yolo_patch_work/dataset" # Path to your dataset root directory
+
+# Dataset Information
+train: C:/Projects/FreeZem/NeonatesCounter/git/NeonatesCounter/yolo_patch_work/dataset/images/train # Path to your training images directory
+val: C:/Projects/FreeZem/NeonatesCounter/git/NeonatesCounter/yolo_patch_work/dataset/images/val   # Path to your validation images directory
+
+# Paths for annotations
+# These should be the paths to your text annotation files
+train_annotations: C:/Projects/FreeZem/NeonatesCounter/git/NeonatesCounter/yolo_patch_work/dataset/labels/train   # Path to your training labels directory
+val_annotations: C:/Projects/FreeZem/NeonatesCounter/git/NeonatesCounter/yolo_patch_work/dataset/labels/val   # Path to your validation labels directory
